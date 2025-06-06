@@ -4,7 +4,16 @@ object ch05_BookFriendRecommendations extends App {
   case class Book(title: String, authors: List[String])
   case class Movie(title: String)
 
-  def recommendationFeed(books: List[Book]) = ???
+  def recommendationFeed(books: List[Book])        = {
+    books.flatMap(book =>
+      book.authors.flatMap(author =>
+        bookAdaptations(author).map(movie =>
+          s"You may like ${movie.title}, " +
+            s"because you liked $author's ${book.title}"
+        )
+      )
+    )
+  }
   def bookAdaptations(author: String): List[Movie] = {
     if (author == "Tolkien") {
       List(
@@ -17,12 +26,12 @@ object ch05_BookFriendRecommendations extends App {
   def recommendedBooks(friend: String): List[Book] = {
     val scala = List(
       Book("FP in Scala", List("Chiusano", "Bjarnason")),
-      Book("Get Programming with Scala", List("Sfregola")),
+      Book("Get Programming with Scala", List("Sfregola"))
     )
 
     val fiction = List(
       Book("Harry Potter", List("Rowling")),
-      Book("The Lord of the Rings", List("Tolkien")),
+      Book("The Lord of the Rings", List("Tolkien"))
     )
 
     if (friend == "Alice") scala
@@ -51,12 +60,6 @@ object ch05_BookFriendRecommendations extends App {
     val books = List(
       Book("FP in Scala", List("Chiusano", "Bjarnason")),
       Book("The Hobbit", List("Tolkien"))
-    )
-
-    println(
-      books
-        .flatMap(_.authors)
-        .flatMap(bookAdaptations)
     )
 
     val expected = List(
